@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pages vs Workers Demo</title>
+  </head>
+  <body>
+    <h1>Pages vs Workers (Edge Separation Demo)</h1>
+
+    <p>
+      This page is served by <b>Cloudflare Pages</b> (content delivery on page load).
+      Clicking the button sends a request to a <b>Cloudflare Worker</b> (request-level logic).
+    </p>
+
+    <button id="inspect">Trigger Worker Request</button>
+    <pre id="output">Click the button to call the Worker…</pre>
+
+    <script>
+      const WORKER_URL = "https://edge-separation-demo.nayeon.workers.dev/";
+
+      document.getElementById("inspect").onclick = async () => {
+        const output = document.getElementById("output");
+        output.textContent = "Calling Worker…";
+        try {
+          const res = await fetch(WORKER_URL);
+          const data = await res.json();
+          output.textContent = JSON.stringify(data, null, 2);
+        } catch (e) {
+          output.textContent = "Error: " + e.message;
+        }
+      };
+    </script>
+  </body>
+</html>
